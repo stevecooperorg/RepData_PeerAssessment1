@@ -25,7 +25,7 @@ kable(activity[2464:2469,])
 
 ## What is the average daily activity pattern?
 
-we can take our five-minute interval reading and combine them into daily step counts. We use this to show the distribution of different step counts. (Note that in the calculations below, missing values are treated as zero, which will under-represent the total number of steps taken.)
+we can take our five-minute interval reading and combine them into daily step counts, a mean, and a median. We use this to show the distribution of different step counts. (Note that in the calculations below, missing values are treated as zero, which will under-represent the total number of steps taken.)
 
 ```{r}
 stepsPerDay <- activity %>%
@@ -38,9 +38,12 @@ hist(stepsPerDay$totalStepsPerDay,
      breaks = 20, 
      main = "Histogram of total steps per day", 
      xlab = "total steps per day")
+
+medianTotalStepsPerDay <- median(stepsPerDay$totalStepsPerDay)
+meanTotalStepsPerDay <- mean(stepsPerDay$totalStepsPerDay)
 ```
 
-We notice from this that there are two peaks - one at zero, which probably represents the days where the device was not used, and another peak at the **median value of `r medianTotalStepsPerDay <- median(stepsPerDay$totalStepsPerDay); sprintf("%0.0f", medianTotalStepsPerDay)` steps per day**. We will see the significance of this peak later in the analysis. The mean is **`r meanTotalStepsPerDay <- mean(stepsPerDay$totalStepsPerDay); round(meanTotalStepsPerDay, 0)` steps per day**. 
+We notice from this that there are two peaks - one at zero, which probably represents the days where the device was not used, and another peak at the **median value of `r sprintf("%0.0f", medianTotalStepsPerDay)` steps per day**. We will see the significance of this peak later in the analysis. The mean is **`r round(meanTotalStepsPerDay, 0)` steps per day**. 
 
 What does the pattern look like over the course of a day? We can plot the average number of steps taken in any 5-minute period. Again, note that these numbers are lower than reality. 
 
@@ -62,7 +65,7 @@ whichIntervalIsIt <- fiveMinuteIntervals[whichIntervalHasTheMax, "interval"]; wh
 
 ## Imputing missing values
 
-As mentioned earlier, the missing data in the dataset creates some problems. Missing values (representing times where the device is not recording) will bring down the average. There are `r sum(is.na(activity$steps))` missing recordings, representing a total of `r round(100 * sum(is.na(activity$steps)) / length(activity$steps), 1)`%. To account for these missing values, we will replace missing values with something suitable. We have chosen to fill the missing slots in any interval with the mean value calcuated above.
+As mentioned earlier, the missing data in the dataset creates some problems. Missing values (representing times where the device is not recording) will bring down the average. There are **`r sum(is.na(activity$steps))` missing recordings**, representing a total of `r round(100 * sum(is.na(activity$steps)) / length(activity$steps), 1)`%. To account for these missing values, we will replace missing values with something suitable. We have chosen to fill the missing slots in any interval with the mean value calcuated above.
 
 ```{r}
 activityWithMeanValues <- activity %>% 
@@ -95,7 +98,7 @@ impactOnMean <- abs(meanTotalStepsPerDay - meanTotalStepsPerDayImputed) / meanTo
 impactOnMedian <- abs(medianTotalStepsPerDay - medianTotalStepsPerDayImputed) / medianTotalStepsPerDay
 ```
 
-Our new mean is `r sprintf("%0.2f", meanTotalStepsPerDayImputed)`, up `r sprintf("%0.2f", impactOnMean*100)`% from `r sprintf("%0.2f", meanTotalStepsPerDay)`. Our new median is `r sprintf("%0.2f", medianTotalStepsPerDayImputed)`, up `r sprintf("%0.2f", impactOnMedian*100)`% from `r sprintf("%0.2f", medianTotalStepsPerDay)`.
+Our new mean is **`r sprintf("%0.2f", meanTotalStepsPerDayImputed)`**, up `r sprintf("%0.2f", impactOnMean*100)`% from `r sprintf("%0.2f", meanTotalStepsPerDay)`. Our new median is **`r sprintf("%0.2f", medianTotalStepsPerDayImputed)`**, up `r sprintf("%0.2f", impactOnMedian*100)`% from `r sprintf("%0.2f", medianTotalStepsPerDay)`.
 
 ## Are there differences in activity patterns between weekdays and weekends?
 

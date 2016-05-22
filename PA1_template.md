@@ -27,7 +27,7 @@ Each observation is a step count within a 5-minute interval, the day, and the ti
 
 ## What is the average daily activity pattern?
 
-we can take our five-minute interval reading and combine them into daily step counts. We use this to show the distribution of different step counts. (Note that in the calculations below, missing values are treated as zero, which will under-represent the total number of steps taken.)
+we can take our five-minute interval reading and combine them into daily step counts, a mean, and a median. We use this to show the distribution of different step counts. (Note that in the calculations below, missing values are treated as zero, which will under-represent the total number of steps taken.)
 
 
 ```r
@@ -44,6 +44,11 @@ hist(stepsPerDay$totalStepsPerDay,
 ```
 
 ![](PA1_template_files/figure-html/unnamed-chunk-3-1.png)<!-- -->
+
+```r
+medianTotalStepsPerDay <- median(stepsPerDay$totalStepsPerDay)
+meanTotalStepsPerDay <- mean(stepsPerDay$totalStepsPerDay)
+```
 
 We notice from this that there are two peaks - one at zero, which probably represents the days where the device was not used, and another peak at the **median value of 10395 steps per day**. We will see the significance of this peak later in the analysis. The mean is **9354 steps per day**. 
 
@@ -69,7 +74,7 @@ Note that there is a clear peak in the morning; **this peak occurs at 835.** One
 
 ## Imputing missing values
 
-As mentioned earlier, the missing data in the dataset creates some problems. Missing values (representing times where the device is not recording) will bring down the average. There are 2304 missing recordings, representing a total of 13.1%. To account for these missing values, we will replace missing values with something suitable. We have chosen to fill the missing slots in any interval with the mean value calcuated above.
+As mentioned earlier, the missing data in the dataset creates some problems. Missing values (representing times where the device is not recording) will bring down the average. There are **2304 missing recordings**, representing a total of 13.1%. To account for these missing values, we will replace missing values with something suitable. We have chosen to fill the missing slots in any interval with the mean value calcuated above.
 
 
 ```r
@@ -107,7 +112,7 @@ impactOnMean <- abs(meanTotalStepsPerDay - meanTotalStepsPerDayImputed) / meanTo
 impactOnMedian <- abs(medianTotalStepsPerDay - medianTotalStepsPerDayImputed) / medianTotalStepsPerDay
 ```
 
-Our new mean is 10766.19, up 15.09% from 9354.23. Our new median is 10766.19, up 3.57% from 10395.00.
+Our new mean is **10766.19**, up 15.09% from 9354.23. Our new median is **10766.19**, up 3.57% from 10395.00.
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
